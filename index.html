@@ -23,29 +23,33 @@
     </div>
 
     <script type="module">
-        import 'https://esm.sh/@apolopay-sdk/ui';
-
-        // Extraemos el ID mágico que envió tu Bot de WhatsApp
         const urlParams = new URLSearchParams(window.location.search);
         const processId = urlParams.get('id');
         
-        // 🔑 AQUÍ VA TU LLAVE PÚBLICA (pk_...)
+        // 🔑 PON TU LLAVE PÚBLICA AQUÍ ABAJO (Debe empezar por pk_)
         const publicKey = "pk_21d8c63c22ee40c6d15fa9b305f9ee22"; 
 
         const contenedor = document.getElementById('contenedor-boton');
 
         if (processId && processId !== "null") {
-            // Si todo está bien, inyectamos el botón oficial de Apolo
+            // 1. Primero preparamos el espacio para el botón (Nota que ahora dice public-key con guion)
             contenedor.innerHTML = `
                 <payment-button 
-                    publicKey="${publicKey}" 
+                    public-key="${publicKey}" 
                     process-id="${processId}">
                 </payment-button>
             `;
+
+            // 2. Luego descargamos la herramienta de Apolo
+            import('https://esm.sh/@apolopay-sdk/ui').then(() => {
+                console.log("¡Botón de Apolo Pay cargado!");
+            }).catch(error => {
+                contenedor.innerHTML = "<p style='color:#ff4a4a;'>❌ Error conectando con el servidor de pagos. Intenta recargar la página.</p>";
+            });
+            
         } else {
             contenedor.innerHTML = "<p style='color:#ff4a4a;'>❌ Error: Orden inválida o expirada. Por favor vuelve a WhatsApp.</p>";
         }
     </script>
-
 </body>
 </html>
