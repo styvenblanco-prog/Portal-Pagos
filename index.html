@@ -10,46 +10,35 @@
         h2 { color: #00d2ff; margin-bottom: 5px; }
         p { color: #8e95ab; margin-bottom: 30px; font-size: 15px; }
     </style>
+    <script type="module" src="https://esm.sh/@apolopay-sdk/ui"></script>
 </head>
 <body>
 
     <div class="caja-pago">
-        <h2>💳 BLANKO TECH</h2>
+        <h2>💳 BLANKO TECH (V2)</h2> 
         <p>Estás a un paso de finalizar tu compra.</p>
         
         <div id="contenedor-boton">
-            <p id="mensaje">⏳ Cargando pasarela segura...</p>
+            <p style="color: #ffcc00;">⏳ Cargando botón...</p>
         </div>
     </div>
 
-    <script type="module">
+    <script>
+        // 🔑 PON TU LLAVE PÚBLICA AQUÍ ABAJO (pk_...)
+        const PUBLIC_KEY = "pk_21d8c63c22ee40c6d15fa9b305f9ee22"; 
+
+        // Extraemos el ID mágico
         const urlParams = new URLSearchParams(window.location.search);
         const processId = urlParams.get('id');
-        
-        // 🔑 PON TU LLAVE PÚBLICA AQUÍ ABAJO (Debe empezar por pk_)
-        const publicKey = "pk_21d8c63c22ee40c6d15fa9b305f9ee22"; 
-
         const contenedor = document.getElementById('contenedor-boton');
 
         if (processId && processId !== "null") {
-            // 1. Primero preparamos el espacio para el botón (Nota que ahora dice public-key con guion)
-            contenedor.innerHTML = `
-                <payment-button 
-                    publicKey="pk_21d8c63c22ee40c6d15fa9b305f9ee22" 
-                    process-id="${processId}"
-                ></payment-button>
-            `;
-
-            // 2. Luego descargamos la herramienta de Apolo
-            import('https://esm.sh/@apolopay-sdk/ui').then(() => {
-                console.log("¡Botón de Apolo Pay cargado!");
-            }).catch(error => {
-                contenedor.innerHTML = "<p style='color:#ff4a4a;'>❌ Error conectando con el servidor de pagos. Intenta recargar la página.</p>";
-            });
-            
+            // Inyectamos el botón directamente
+            contenedor.innerHTML = '<payment-button public-key="' + PUBLIC_KEY + '" process-id="' + processId + '"></payment-button>';
         } else {
-            contenedor.innerHTML = "<p style='color:#ff4a4a;'>❌ Error: Orden inválida o expirada. Por favor vuelve a WhatsApp.</p>";
+            contenedor.innerHTML = "<p style='color:#ff4a4a;'>❌ Error: Falta el ID de la orden en el enlace.</p>";
         }
     </script>
+
 </body>
 </html>
