@@ -5,40 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pago Seguro | BLANKO TECH</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px 20px; background-color: #0f111a; color: #ffffff; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 50px 20px; background-color: #0f111a; color: #ffffff; }
         .caja-pago { background-color: #1e2233; padding: 40px 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 400px; margin: auto; border: 1px solid #2a2f45; }
-        h2 { color: #00d2ff; margin-bottom: 5px; }
-        p { color: #8e95ab; margin-bottom: 30px; font-size: 15px; }
+        h2 { color: #00d2ff; margin: 0 0 10px 0; }
+        .monto { font-size: 24px; color: #00e676; font-weight: bold; margin-bottom: 20px; }
+        p { color: #8e95ab; margin-bottom: 30px; }
+        /* Estilo para asegurar que el botón tenga espacio */
+        #contenedor-boton { min-height: 100px; display: flex; justify-content: center; align-items: center; }
     </style>
-    <script type="module" src="https://esm.sh/@apolopay-sdk/ui"></script>
 </head>
 <body>
 
     <div class="caja-pago">
-        <h2>💳 BLANKO TECH (V2)</h2> 
-        <p>Estás a un paso de finalizar tu compra.</p>
+        <h2>💳 BLANKO TECH</h2>
+        <p>Selecciona tu método de pago preferido abajo:</p>
         
         <div id="contenedor-boton">
-            <p style="color: #ffcc00;">⏳ Cargando botón...</p>
+            <p id="estado">⏳ Cargando métodos de pago...</p>
         </div>
     </div>
 
+    <script type="module" src="https://unpkg.com/@apolopay-sdk/ui@latest/dist/apolopay-ui/apolopay-ui.esm.js"></script>
+    
     <script>
-        // 🔑 PON TU LLAVE PÚBLICA AQUÍ ABAJO (pk_...)
-        const PUBLIC_KEY = "pk_21d8c63c22ee40c6d15fa9b305f9ee22"; 
+        // 🔑 TU LLAVE PÚBLICA AQUÍ
+        const MI_LLAVE_PUBLICA = "pk_21d8c63c22ee40c6d15fa9b305f9ee22"; 
 
-        // Extraemos el ID mágico
+        // Capturamos el ID que manda el bot
         const urlParams = new URLSearchParams(window.location.search);
         const processId = urlParams.get('id');
         const contenedor = document.getElementById('contenedor-boton');
+        const textoEstado = document.getElementById('estado');
 
-        if (processId && processId !== "null") {
-            // Inyectamos el botón directamente
-            contenedor.innerHTML = '<payment-button public-key="' + PUBLIC_KEY + '" process-id="' + processId + '"></payment-button>';
+        if (processId) {
+            console.log("Orden detectada:", processId);
+            // Inyectamos el botón
+            contenedor.innerHTML = `<payment-button public-key="${MI_LLAVE_PUBLICA}" process-id="${processId}"></payment-button>`;
         } else {
-            contenedor.innerHTML = "<p style='color:#ff4a4a;'>❌ Error: Falta el ID de la orden en el enlace.</p>";
+            textoEstado.innerHTML = "❌ Error: No se encontró el ID de la orden.";
+            textoEstado.style.color = "red";
         }
     </script>
-
 </body>
 </html>
