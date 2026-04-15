@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Seguro | BLANKO TECH</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 40px 20px; background-color: #121212; color: #ffffff; }
+        .caja-pago { background-color: #1e1e1e; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); max-width: 400px; margin: auto; }
+        h2 { color: #00e676; }
+        p { color: #aaaaaa; margin-bottom: 25px; }
+    </style>
+</head>
+<body>
+
+    <div class="caja-pago">
+        <h2>💳 BLANKO TECH</h2>
+        <p>Estás a un paso de finalizar tu compra de forma segura.</p>
+        
+        <div id="apolo-button-container">
+            <p id="mensaje-carga">⏳ Cargando pasarela de pago...</p>
+        </div>
+    </div>
+
+    <script>
+        // 1. El código lee el "id" que tu bot de WhatsApp le mandó en el link
+        const urlParams = new URLSearchParams(window.location.search);
+        const processId = urlParams.get('id');
+
+        if(processId) {
+            // ¡El ID llegó perfecto! 
+            console.log("ID de Apolo listo:", processId);
+            
+            // Aquí Apolo inyectará su botón mágico
+            // (Revisaremos la documentación para poner el script exacto)
+            
+            document.getElementById('mensaje-carga').innerHTML = `✅ Orden <b>${processId}</b> lista para pagar. <br><br> <i>(Espacio reservado para el botón de Apolo)</i>`;
+        } else {
+            document.getElementById('apolo-button-container').innerHTML = "<p style='color:red;'>❌ Error: No se encontró tu orden. Por favor, regresa a WhatsApp y genera un nuevo pago.</p>";
+        }
+    </script>
+
+</body>
+</html>
